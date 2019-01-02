@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Got this code to make button from Stack Overflow-->
+<!--https://stackoverflow.com/questions/27703687/how-to-make-a-capsule-shape-button-in-android-->
+<!--By User HendraWD-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="1000dp"/>
+
+    <solid android:color="@color/colorPrimaryDark"/>
+</shape>
