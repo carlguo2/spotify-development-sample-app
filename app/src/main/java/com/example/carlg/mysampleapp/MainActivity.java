@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,11 +28,14 @@ public class MainActivity extends AppCompatActivity {
     // then find a way to chart that data in some way
     private RequestedData data = null;
     private String authToken;
+    private TextView status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // set up the TextView
+        status = findViewById(R.id.track_1);
         // logged in snackbar in here
         Snackbar loginSnackbar = Snackbar.make(findViewById(R.id.main_layout),
                                                 R.string.auth_success,
@@ -42,6 +47,32 @@ public class MainActivity extends AppCompatActivity {
         String authTokenKey = "authToken";
         Intent fromLoginIntent = getIntent();
         authToken = fromLoginIntent.getExtras().getString(authTokenKey);
+
+        // set up the button
+        final Button retrieveData = findViewById(R.id.get_data);
+        retrieveData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // disable button after pressed
+                retrieveData.setEnabled(false);
+
+                // fill the RequestedData component with REST API data
+                String recentHistoryUrl = "https://api.spotify.com/v1/me/player/recently-played";
+                Log.d("onClick", "clicked");
+                RequestedData historyData = getData(recentHistoryUrl, authToken);
+
+                // set button to enable again
+                retrieveData.setEnabled(true);
+
+                // organize data here
+                if (historyData != null) {
+                    String str = Integer.toString(historyData.getItems().length);
+                    status.setText(str);
+                } else {
+                    status.setText("Null");
+                }
+            }
+        });
     }
 
     private RequestedData getData(String requestUrl, final String token) {
@@ -90,18 +121,19 @@ public class MainActivity extends AppCompatActivity {
         return data;
     }
 
-    private void onClickRequestData(View view) {
-        // fill the RequestedData component with REST API data
-        String recentHistoryUrl = "https://api.spotify.com/v1/me/player/recently-played";
-        RequestedData historyData = getData(recentHistoryUrl, authToken);
-        // organize data here
-        if (historyData != null) {
-            Log.d("artist", historyData.getItems()[0]
-                                            .getTrack()
-                                            .getArtists()[0]
-                                            .getName());
-        }
-    }
+//    public void onClickRequestData(View view) {
+//        // fill the RequestedData component with REST API data
+//        String recentHistoryUrl = "https://api.spotify.com/v1/me/player/recently-played";
+//        Log.d("onClick", "clicked");
+//        RequestedData historyData = getData(recentHistoryUrl, authToken);
+//        // organize data here
+//        if (historyData != null) {
+//            String str = Integer.toString(historyData.getItems().length);
+//            status.setText(str);
+//        } else {
+//            status.setText("Null");
+//        }
+//    }
 
     @Override
     protected void onStart() {
