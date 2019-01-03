@@ -83,29 +83,29 @@ public final class R {
         public static final int action_image = 0x7f080010;
         public static final int action_text = 0x7f080016;
         public static final int actions = 0x7f080017;
-        public static final int async = 0x7f08001d;
-        public static final int blocking = 0x7f080021;
-        public static final int chronometer = 0x7f08002e;
-        public static final int com_spotify_sdk_login_webview = 0x7f080032;
-        public static final int com_spotify_sdk_login_webview_container = 0x7f080033;
-        public static final int forever = 0x7f080050;
-        public static final int icon = 0x7f080058;
-        public static final int icon_group = 0x7f080059;
-        public static final int info = 0x7f08005c;
-        public static final int italic = 0x7f08005e;
-        public static final int line1 = 0x7f080063;
-        public static final int line3 = 0x7f080064;
-        public static final int normal = 0x7f080074;
-        public static final int notification_background = 0x7f080075;
-        public static final int notification_main_column = 0x7f080076;
-        public static final int notification_main_column_container = 0x7f080077;
-        public static final int right_icon = 0x7f080084;
-        public static final int right_side = 0x7f080085;
-        public static final int tag_transition_group = 0x7f0800b1;
-        public static final int text = 0x7f0800b4;
-        public static final int text2 = 0x7f0800b5;
-        public static final int time = 0x7f0800bd;
-        public static final int title = 0x7f0800be;
+        public static final int async = 0x7f08001e;
+        public static final int blocking = 0x7f080022;
+        public static final int chronometer = 0x7f08002f;
+        public static final int com_spotify_sdk_login_webview = 0x7f080033;
+        public static final int com_spotify_sdk_login_webview_container = 0x7f080034;
+        public static final int forever = 0x7f080051;
+        public static final int icon = 0x7f080059;
+        public static final int icon_group = 0x7f08005a;
+        public static final int info = 0x7f08005d;
+        public static final int italic = 0x7f08005f;
+        public static final int line1 = 0x7f080065;
+        public static final int line3 = 0x7f080066;
+        public static final int normal = 0x7f080076;
+        public static final int notification_background = 0x7f080077;
+        public static final int notification_main_column = 0x7f080078;
+        public static final int notification_main_column_container = 0x7f080079;
+        public static final int right_icon = 0x7f080086;
+        public static final int right_side = 0x7f080087;
+        public static final int tag_transition_group = 0x7f0800b3;
+        public static final int text = 0x7f0800b6;
+        public static final int text2 = 0x7f0800b7;
+        public static final int time = 0x7f0800bf;
+        public static final int title = 0x7f0800c0;
     }
     public static final class integer {
         private integer() {}
@@ -130,7 +130,7 @@ public final class R {
         public static final int com_spotify_sdk_login_progress = 0x7f0d002f;
         public static final int com_spotify_sdk_redirect_host = 0x7f0d0030;
         public static final int com_spotify_sdk_redirect_scheme = 0x7f0d0031;
-        public static final int status_bar_notification_info_overflow = 0x7f0d003e;
+        public static final int status_bar_notification_info_overflow = 0x7f0d003f;
     }
     public static final class style {
         private style() {}

@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,11 +18,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Pie;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,14 +38,51 @@ public class MainActivity extends AppCompatActivity {
     // then find a way to chart that data in some way
     private RequestedData data = null;
     private String authToken;
-    private TextView status;
+    private boolean isValidLimit = false;
+
+    // add a TextWatcher so the button field depends on the EditText
+    // from https://stackoverflow.com/questions/
+    //              15002963/in-android-how-to-make-login-button-disable-with-respect-to-edittext
+    // by user MoDev
+    TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkIfValid();
+        }
+    };
+
+    private void checkIfValid() {
+        EditText limit = findViewById(R.id.limit_param);
+        Button graphData = findViewById(R.id.graph_data);
+        if (TextUtils.isEmpty(limit.getText())) {
+            graphData.setEnabled(false);
+            return;
+        }
+        // if not empty, check if valid limit
+        int limitAmt = Integer.parseInt(limit.getText().toString());
+
+        if (limitAmt < 1 || limitAmt > 50) {
+            graphData.setEnabled(false);
+        } else  {
+            graphData.setEnabled(true);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // set up the TextView
-        status = findViewById(R.id.track_1);
+
         // logged in snackbar in here
         Snackbar loginSnackbar = Snackbar.make(findViewById(R.id.main_layout),
                                                 R.string.auth_success,
@@ -48,8 +95,14 @@ public class MainActivity extends AppCompatActivity {
         Intent fromLoginIntent = getIntent();
         authToken = fromLoginIntent.getExtras().getString(authTokenKey);
 
+        // set up EditText
+        EditText limitParam = findViewById(R.id.limit_param);
+        limitParam.addTextChangedListener(mTextWatcher);
         // set up the button
-        final Button retrieveData = findViewById(R.id.get_data);
+        final Button retrieveData = findViewById(R.id.graph_data);
+        // run once to disable button if empty
+        checkIfValid();
+
         retrieveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,28 +114,37 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("onClick", "clicked");
                 RequestedData historyData = getData(recentHistoryUrl, authToken);
 
-                // set button to enable again
-                retrieveData.setEnabled(true);
-
                 // organize data here
                 if (historyData != null) {
-                    String str = Integer.toString(historyData.getItems().length);
-                    status.setText(str);
-                } else {
-                    status.setText("Null");
+                    // graph data
+                    graphData(historyData);
                 }
+
+                // set button to enable again
+                retrieveData.setEnabled(true);
             }
         });
     }
 
+    /**
+     * Use REST API GET request to retrieve current history data
+     *
+     * @param requestUrl url we are using to get the data
+     * @param token authentication token we are using to get data from account
+     * @return data that we are using
+     */
     private RequestedData getData(String requestUrl, final String token) {
         // do JSONRequest here
         RequestQueue rQueue;
         rQueue = Volley.newRequestQueue(getApplicationContext());
 
+        // get the limit parameter from editText
+        EditText limitParam = findViewById(R.id.limit_param);
+        int limAmt = Integer.parseInt(limitParam.getText().toString());
+
         JsonObjectRequest objRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                requestUrl,
+                requestUrl + "?limit=" + limAmt, // use this so limAmt items get queried
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -107,13 +169,6 @@ public class MainActivity extends AppCompatActivity {
                 headers.put("Authorization", "Bearer " + token);
                 return headers;
             }
-
-            @Override
-            public Map<String, String> getParams() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("limit", "50");
-                return params;
-            }
         };
 
         rQueue.add(objRequest);
@@ -121,23 +176,52 @@ public class MainActivity extends AppCompatActivity {
         return data;
     }
 
-//    public void onClickRequestData(View view) {
-//        // fill the RequestedData component with REST API data
-//        String recentHistoryUrl = "https://api.spotify.com/v1/me/player/recently-played";
-//        Log.d("onClick", "clicked");
-//        RequestedData historyData = getData(recentHistoryUrl, authToken);
-//        // organize data here
-//        if (historyData != null) {
-//            String str = Integer.toString(historyData.getItems().length);
-//            status.setText(str);
-//        } else {
-//            status.setText("Null");
-//        }
-//    }
+    private void graphData(RequestedData data) {
+        HashMap<String , Integer> organizedData = organizeData(data);
+        // use AnyChart library to create the graph
+        Pie pie = AnyChart.pie();
+        // get list of keys
+        List<String> keyList = new ArrayList<>(organizedData.keySet());
+        List<DataEntry> dataList = new ArrayList<>();
+        // convert keys to data entry
+        for (String key : keyList) {
+            dataList.add(new ValueDataEntry(key, organizedData.get(key)));
+        }
+        // set everything into the pie object
+        pie.data(dataList);
+        AnyChartView anyChartView = findViewById(R.id.any_chart_view);
+        anyChartView.setChart(pie);
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    /**
+     * Takes in the RequestedData object and organizes the artists into HashMap
+     *
+     * @param data RequestedData we received from the REST API call
+     * @return HashMap of artists (key) and frequency (value) listened to
+     */
+    private HashMap<String, Integer> organizeData(RequestedData data) {
+        HashMap<String, Integer> sortedData = new HashMap<>(50);
+
+        // loop through the array of play history objects
+        for (PlayHistoryObject pho : data.getItems()) {
+            JSONSpotifyArtists primaryArtist = pho.getTrack().getArtists()[0];
+            // get the primary artist of the track
+            if (sortedData.containsKey(primaryArtist.getName())) {
+                // replace value in map by incrementing it
+                Integer newFreq = sortedData.get(primaryArtist.getName()) + 1;
+                sortedData.put(primaryArtist.getName(), newFreq);
+            } else {
+                // insert key value pair into the map
+                sortedData.put(primaryArtist.getName(), 1);
+            }
+        }
+
+        return sortedData;
     }
 
     @Override

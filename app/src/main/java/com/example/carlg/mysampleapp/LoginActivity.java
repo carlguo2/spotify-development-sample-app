@@ -21,6 +21,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Creates the authentication request with scopes and sends it out for a response
+     * @param view view that is in the parameter
+     */
     public void login(View view) {
 
         // create AuthenticationRequest using builder
