@@ -29,12 +29,12 @@ public class LoginActivity extends AppCompatActivity {
 
         // create AuthenticationRequest using builder
         AuthenticationRequest.Builder builder =
-                new AuthenticationRequest.Builder(this.getString(R.string.client_id),
+                new AuthenticationRequest.Builder(this.getString(R.string.client_id),   // use own client id from Spotify dashboard
                         AuthenticationResponse.Type.TOKEN,
-                        this.getString(R.string.redirect_uri));
+                        this.getString(R.string.redirect_uri));              // use uri created at Spotify dashboard
 
         // set scope of what we want to access
-        builder.setScopes(new String[] {"user-read-recently-played"});
+        builder.setScopes(new String[] {"user-read-recently-played"});    // use this scope in order to retrieve play data
         // build the AuthenticationRequest
         AuthenticationRequest request = builder.build();
         // open the LoginActivity from Authentication library

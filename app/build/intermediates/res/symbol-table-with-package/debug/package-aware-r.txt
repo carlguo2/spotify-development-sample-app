@@ -1028,6 +1028,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable spotify_logo_rgb_black
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
 id ALT
@@ -1198,6 +1199,7 @@ id snap
 id snapMargins
 id spacer
 id split_action_bar
+id spotify_logo
 id spread
 id spread_inside
 id src_atop
@@ -1376,6 +1378,7 @@ string client_id
 string com_spotify_sdk_login_progress
 string com_spotify_sdk_redirect_host
 string com_spotify_sdk_redirect_scheme
+string content_desc
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
 string graph_data

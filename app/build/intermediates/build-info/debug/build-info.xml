@@ -6,7 +6,7 @@
     density="420dpi"
     format="10"
     plugin-version="3.2.1"
-    timestamp="1546555438485"
+    timestamp="1546571288341"
     token="-7318539806787758270"
     verifier="FULL_BUILD_REQUESTED" >
 
@@ -65,7 +65,7 @@
 
     <build
         build-mode="FULL"
-        timestamp="1546555438485"
+        timestamp="1546571288341"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="C:\Users\carlg\mysampleapp\app\build\intermediates\split-apk\debug\slices\slice_1.apk"

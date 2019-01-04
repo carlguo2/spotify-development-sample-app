@@ -101,11 +101,11 @@ public final class R {
         public static final int notification_main_column_container = 0x7f080079;
         public static final int right_icon = 0x7f080086;
         public static final int right_side = 0x7f080087;
-        public static final int tag_transition_group = 0x7f0800b3;
-        public static final int text = 0x7f0800b6;
-        public static final int text2 = 0x7f0800b7;
-        public static final int time = 0x7f0800bf;
-        public static final int title = 0x7f0800c0;
+        public static final int tag_transition_group = 0x7f0800b4;
+        public static final int text = 0x7f0800b7;
+        public static final int text2 = 0x7f0800b8;
+        public static final int time = 0x7f0800c0;
+        public static final int title = 0x7f0800c1;
     }
     public static final class integer {
         private integer() {}
@@ -130,7 +130,7 @@ public final class R {
         public static final int com_spotify_sdk_login_progress = 0x7f0d002f;
         public static final int com_spotify_sdk_redirect_host = 0x7f0d0030;
         public static final int com_spotify_sdk_redirect_scheme = 0x7f0d0031;
-        public static final int status_bar_notification_info_overflow = 0x7f0d003f;
+        public static final int status_bar_notification_info_overflow = 0x7f0d0040;
     }
     public static final class style {
         private style() {}
