@@ -6,6 +6,3 @@
 .DS_Store
 /build
 /captures
-
-# specific files
-app/src/main/res/values/strings.xml
