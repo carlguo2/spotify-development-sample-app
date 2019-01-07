@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sample App</string>
+    <string name="auth_success">Connection Secured</string>
+    <string name="auth_error">Connection Error</string>
+    <string name="client_id">401e8b25d24b4192a0a623461703c8c7</string>
+    <string name="redirect_uri">com.xxxxx.mysampleapp://callback</string>
+    <string name="log_in">Log Into Spotify</string>
+    <string name="graph_data">Graph Data</string>
+    <string name="content_desc">This is the Logo for Spotify</string>
+</resources>
