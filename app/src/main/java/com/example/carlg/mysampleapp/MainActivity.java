@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     // then find a way to chart that data in some way
     private RequestedData data = null;
     private String authToken;
-    private boolean isValidLimit = false;
+    private boolean isGraphMade = false;
 
     // add a TextWatcher so the button field depends on the EditText
     // from https://stackoverflow.com/questions/
@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 if (historyData != null) {
                     // graph data
                     graphData(historyData);
+                    isGraphMade = true;
                 }
 
                 // set button to enable again
@@ -179,6 +180,12 @@ public class MainActivity extends AppCompatActivity {
     private void graphData(RequestedData data) {
         HashMap<String , Integer> organizedData = organizeData(data);
         // use AnyChart library to create the graph
+        AnyChartView anyChartView = findViewById(R.id.any_chart_view);
+        // check if we need to dispose of graph first
+        if (isGraphMade) {
+            anyChartView.clear();
+        }
+
         Pie pie = AnyChart.pie();
         // get list of keys
         List<String> keyList = new ArrayList<>(organizedData.keySet());
@@ -189,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
         }
         // set everything into the pie object
         pie.data(dataList);
-        AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         anyChartView.setChart(pie);
     }
 
