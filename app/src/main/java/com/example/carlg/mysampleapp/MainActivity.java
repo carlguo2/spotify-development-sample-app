@@ -23,6 +23,8 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
+import com.anychart.enums.Align;
+import com.anychart.enums.LegendLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private RequestedData data = null;
     private String authToken;
     private boolean isGraphMade = false;
+    private int prevLimit = 0;
 
     // add a TextWatcher so the button field depends on the EditText
     // from https://stackoverflow.com/questions/
@@ -178,9 +181,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void graphData(RequestedData data) {
+        // if the limit parameters from previous and now are the same, don't draw anything
+        if (prevLimit == data.getLimit()) {
+            return;
+        }
+
         HashMap<String , Integer> organizedData = organizeData(data);
         // use AnyChart library to create the graph
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
+
         // check if we need to dispose of graph first
         if (isGraphMade) {
             anyChartView.clear();
@@ -196,7 +205,24 @@ public class MainActivity extends AppCompatActivity {
         }
         // set everything into the pie object
         pie.data(dataList);
+
+        // set title to pie chart
+        pie.title("Artists From " + data.getLimit() + " Most Recently Listened to Tracks");
+        // set title for the legend
+        pie.legend().title().enabled(true);
+        pie.legend().title()
+                .text("Artists")
+                .padding(0d, 0d, 10d, 0d);
+        // set legend title at the center
+        pie.legend()
+                .position("center-bottom")
+                .itemsLayout(LegendLayout.HORIZONTAL)
+                .align(Align.CENTER);
+
         anyChartView.setChart(pie);
+
+        // reset the previous limit parameter
+        prevLimit = data.getLimit();
     }
 
     @Override
